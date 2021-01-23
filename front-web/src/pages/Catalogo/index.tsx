@@ -1,7 +1,23 @@
 import React from 'react';
+import ProductCard from './components/productsCard';
+import './styles.scss';
 
 const Catalogo = () => (
-    <h1>Catalogo</h1>
+    <div className="catalog-container">
+        <h1 className="catalog-title">Catalogo de produtos</h1>
+        <div className="catalog-products">
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+        </div>
+    </div>  
 );
 
 export default Catalogo;
