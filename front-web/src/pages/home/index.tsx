@@ -1,9 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import {ReactComponent as MainImage} from '../../core/assets/images/desenho.svg';
+import ButtonIcon from '../../core/components/ByttonIcon';
+import './styles.scss';
 
 const Home = () => (
-    <>
-        <h1>Home</h1>
-    </>
+    <div className="home-container">
+        <div className="row home-content">
+            <div className="col-6 home-text">
+                <h1 className="text-title">Conheça o melhor  <br/> catálogo de produtos</h1>
+                <p className="text-subtitle">Ajudaremos você a encontrar os melhores <br/> produtos do mercado</p>
+                <Link to="/catalogo">
+                <ButtonIcon text= "inice agora sua busca" />
+                </Link>
+            </div>
+            <div className="col-6">
+                <MainImage className="main-image" />
+            </div>
+        </div>
+    </div>
+
 
 );
 
