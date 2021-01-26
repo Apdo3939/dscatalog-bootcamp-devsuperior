@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
-import ProductPrice from '../../../../core/components/ProductPrice';
-import { Product } from '../../../../core/Types/Product';
+import ProductPrice from 'core/components/ProductPrice';
+import { Product } from 'core/Types/Product';
 
 type Props = {
     product: Product;

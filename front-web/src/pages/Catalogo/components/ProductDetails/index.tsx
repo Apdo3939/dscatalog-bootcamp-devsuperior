@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ReactComponent as ArrowIcon } from '../../../../core/assets/images/seta.svg';
+import { ReactComponent as ArrowIcon } from 'core/assets/images/seta.svg';
 import './styles.scss';
-import ProductPrice from '../../../../core/components/ProductPrice';
-import makeRequest from '../../../../core/utils/request';
-import { Product } from '../../../../core/Types/Product';
+import ProductPrice from 'core/components/ProductPrice';
+import makeRequest from 'core/utils/request';
+import { Product } from 'core/Types/Product';
+import ProductInfoLoader from '../Loaders/ProductInfoLoader';
+import ProductDescriptionLoader from '../Loaders/ProductDescriptionLoader';
 
 type ParamsType = {
     productId: string;
@@ -13,13 +15,15 @@ type ParamsType = {
 const ProductDetails = () => {
 
     const { productId } = useParams<ParamsType>();
-    console.log(productId);
     const [product, setProduct] = useState<Product>();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        makeRequest({url:`/products/${productId}`})
-        .then(response => setProduct(response.data));
-    },[productId]);
+        setIsLoading(true)
+        makeRequest({ url: `/products/${productId}` })
+            .then(response => setProduct(response.data))
+            .finally(()=> setIsLoading(false));
+    }, [productId]);
 
     return (
         <div className="products-details-container">
@@ -31,7 +35,7 @@ const ProductDetails = () => {
                 <div className="row">
                     <div className="col-6 pr-5">
                         <div className="products-details-card text-center">
-                            <img src={product?.imgUrl} alt={product?.name} className="products-details-image"/>
+                            {isLoading ? <ProductInfoLoader /> : <img src={product?.imgUrl} alt={product?.name} className="products-details-image" />}
                         </div>
                         <h1 className="products-details-name">{product?.name}</h1>
                         {product?.price && <ProductPrice price={product?.price} />}
@@ -39,7 +43,7 @@ const ProductDetails = () => {
                     <div className="col-6 products-details-card">
                         <h1 className="products-description-title">Descrição do Produto</h1>
                         <p className="products-description-text">
-                            {product?.description}
+                            {isLoading ? <ProductDescriptionLoader /> : product?.description}
                         </p>
                     </div>
                 </div>
