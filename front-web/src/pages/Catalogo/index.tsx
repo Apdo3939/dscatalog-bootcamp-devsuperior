@@ -5,22 +5,24 @@ import './styles.scss';
 import makeRequest from 'core/utils/request';
 import { ProductResponse } from 'core/Types/Product';
 import ProductCardLoader from './components/Loaders/ProductCardLoader';
+import Pagination from 'core/components/Pagination';
 
 const Catalogo = () => {
 
     const [productResponse, setProductResponse] = useState<ProductResponse>();
     const [isLoading, setIsLoading] = useState(false);
+    const [activePage, setActivepage] = useState(0);
 
     useEffect(() => {
         const params = {
-            page: 0,
+            page: activePage,
             linesPerPage: 8
         }
         setIsLoading(true);
         makeRequest({ url: '/products', params })
             .then(response => setProductResponse(response.data))
             .finally(() => setIsLoading(false));
-    }, []);
+    }, [activePage]);
 
     return (
         <div className="catalog-container">
@@ -32,6 +34,11 @@ const Catalogo = () => {
                     </Link>
                 )))}
             </div>
+            {productResponse && 
+            <Pagination 
+                totalpages={productResponse.totalPages}
+                activePage={activePage}
+                onChange={page => setActivepage(page)} />}
         </div>
     );
 }
