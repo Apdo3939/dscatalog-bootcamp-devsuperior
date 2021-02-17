@@ -1,5 +1,6 @@
 package com.apdo3939.dscatalog.services;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apdo3939.dscatalog.dto.CategoryDTO;
 import com.apdo3939.dscatalog.dto.ProductDTO;
+import com.apdo3939.dscatalog.dto.UriDTO;
 import com.apdo3939.dscatalog.entities.Category;
 import com.apdo3939.dscatalog.entities.Product;
 import com.apdo3939.dscatalog.repositories.CategoryRepository;
@@ -32,6 +35,8 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
+	@Autowired
+	private S3Service s3Service;
 	
 	private void copyDTOToEntity(ProductDTO dto, Product entity) {
 		entity.setName(dto.getName());
@@ -95,6 +100,11 @@ public class ProductService {
 			e.getMessage();
 			throw new DataBaseException("Integrety Violation " + id);
 		}
+	}
+
+	public UriDTO uploadFile(MultipartFile file) {
+		URL url = s3Service.uploadFile(file);
+		return new UriDTO(url.toString());
 	}
 
 }
