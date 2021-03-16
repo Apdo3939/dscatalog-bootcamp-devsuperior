@@ -1,6 +1,6 @@
-import makeRequest from 'core/utils/request';
 import React, { useState } from 'react';
 import BaseForm from '../../baseForm';
+import { makeRequest } from 'core/utils/request';
 import './styles.scss';
 
 type FormState = {

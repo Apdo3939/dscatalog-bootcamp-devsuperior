@@ -1,37 +1,56 @@
 import ButtonIcon from 'core/components/ButtonIcon';
+import { saveSessiondata } from 'core/utils/auth';
+import { makeLogin } from 'core/utils/request';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import AuthCard from '../Card';
 import './styles.scss';
 
 type FormData = {
-    email: string;
+    username: string;
     password: string;
 }
 
 const Login = () => {
 
     const { register, handleSubmit } = useForm<FormData>();
+    const [hasError, setHasError] = useState(false);
+    const history = useHistory();
 
     const onSubmit = (data: FormData) => {
-        console.log(data);
+        makeLogin(data)
+        .then((response) => {
+            setHasError(false);
+            saveSessiondata(response.data);
+            history.push('/admin');
+        })
+        .catch(() => {
+            setHasError(true)
+        });
     }
 
     return (
         <div>
             <AuthCard title="Login">
+
+                {hasError && (
+                    <div className="alert alert-danger mt-5">
+                        Usuário ou senha inválidas!
+                    </div>
+                )}
                 <form className="form-login"
                     onSubmit={handleSubmit(onSubmit)}>
                     <input
-                        name = "email"
-                        ref = {register}
+                        name="username"
+                        ref={register({required : true})}
                         type="email"
                         className="form-control input-base margin-bottom-30"
                         placeholder="Email"
                     />
                     <input
-                        name = "password"
-                        ref = {register}
+                        name="password"
+                        ref={register({required : true})}
                         type="password"
                         className="form-control input-base"
                         placeholder="Senha"

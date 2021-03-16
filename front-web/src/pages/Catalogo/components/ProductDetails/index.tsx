@@ -3,10 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { ReactComponent as ArrowIcon } from 'core/assets/images/seta.svg';
 import './styles.scss';
 import ProductPrice from 'core/components/ProductPrice';
-import makeRequest from 'core/utils/request';
 import { Product } from 'core/Types/Product';
 import ProductInfoLoader from '../Loaders/ProductInfoLoader';
 import ProductDescriptionLoader from '../Loaders/ProductDescriptionLoader';
+import { makeRequest } from 'core/utils/request';
 
 type ParamsType = {
     productId: string;

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './components/ProductCard';
 import './styles.scss';
-import makeRequest from 'core/utils/request';
 import { ProductResponse } from 'core/Types/Product';
 import ProductCardLoader from './components/Loaders/ProductCardLoader';
 import Pagination from 'core/components/Pagination';
+import { makeRequest } from 'core/utils/request';
 
 const Catalogo = () => {
 
