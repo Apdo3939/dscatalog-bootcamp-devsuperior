@@ -3,7 +3,7 @@ import { saveSessiondata } from 'core/utils/auth';
 import { makeLogin } from 'core/utils/request';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import AuthCard from '../Card';
 import './styles.scss';
 
@@ -12,22 +12,29 @@ type FormData = {
     password: string;
 }
 
+type LocationState = {
+    from: string;
+}
+
 const Login = () => {
 
-    const { register, handleSubmit } = useForm<FormData>();
+    const { register, handleSubmit, errors } = useForm<FormData>();
     const [hasError, setHasError] = useState(false);
     const history = useHistory();
+    const location = useLocation<LocationState>();
+
+    const { from } = location.state || { from: { pathname: "/admin" } };
 
     const onSubmit = (data: FormData) => {
         makeLogin(data)
-        .then((response) => {
-            setHasError(false);
-            saveSessiondata(response.data);
-            history.push('/admin');
-        })
-        .catch(() => {
-            setHasError(true)
-        });
+            .then((response) => {
+                setHasError(false);
+                saveSessiondata(response.data);
+                history.replace(from);
+            })
+            .catch(() => {
+                setHasError(true)
+            });
     }
 
     return (
@@ -39,26 +46,45 @@ const Login = () => {
                         Usuário ou senha inválidas!
                     </div>
                 )}
-                <form className="form-login"
-                    onSubmit={handleSubmit(onSubmit)}>
-                    <input
-                        name="username"
-                        ref={register({required : true})}
-                        type="email"
-                        className="form-control input-base margin-bottom-30"
-                        placeholder="Email"
-                    />
-                    <input
-                        name="password"
-                        ref={register({required : true})}
-                        type="password"
-                        className="form-control input-base"
-                        placeholder="Senha"
-                    />
+
+                <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="margin-bottom-30">
+                        <input
+                            name="username"
+                            ref={register({
+                                required: "Campo obrigatório",
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: "Email inválido"
+                                }
+                            })}
+                            type="email"
+                            className={`form-control input-base ${errors.username ? 'is-invalid' : ''} `}
+                            placeholder="Email"
+                        />
+                        {errors.username && <div className="invalid-feedback d-block">
+                            {errors.username.message}
+                        </div>}
+                    </div>
+
+                    <div >
+                        <input
+                            name="password"
+                            ref={register({ required: "Campo obrigatório" })}
+                            type="password"
+                            className={`form-control input-base ${errors.password ? 'is-invalid' : ''} `}
+                            placeholder="Senha"
+                        />
+                        {errors.password && <div className="invalid-feedback d-block">
+                            {errors.password.message}
+                        </div>}
+                    </div>
+
                     <Link to="/admin/auth/recover" className="login-link-recover">Esqueci a senha?</Link>
                     <div className="login-submmit">
                         <ButtonIcon text="Logar" />
                     </div>
+
                     <div className="text-center">
                         <span className="not-registered">
                             Não tem Cadastro?

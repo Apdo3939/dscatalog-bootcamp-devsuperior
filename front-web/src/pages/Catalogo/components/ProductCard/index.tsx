@@ -7,7 +7,7 @@ type Props = {
     product: Product;
 }
 
-console.log(new Intl.NumberFormat('pt-BR', {minimumFractionDigits:2}).format(1200));
+//console.log(new Intl.NumberFormat('pt-BR', {minimumFractionDigits:2}).format(1200));
 
 const ProductCard = ({ product }: Props) => (
     <div className="card-base border-radius-10 product-card">
