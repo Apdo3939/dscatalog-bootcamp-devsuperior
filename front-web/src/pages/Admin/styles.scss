@@ -1,9 +1,8 @@
-.admin-container{
+.admin-container {
     display: flex;
-    
-.admin-content{
-    padding: 25px 40px 40px 40px;
-    flex: 1;
-    background: blueviolet;
-}
+
+    .admin-content {
+        padding: 20px 40px 40px 40px;
+        flex   : 1;
+    }
 }

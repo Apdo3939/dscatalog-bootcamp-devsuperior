@@ -16,7 +16,7 @@ const Catalogo = () => {
     useEffect(() => {
         const params = {
             page: activePage,
-            linesPerPage: 8
+            linesPerPage: 5
         }
         setIsLoading(true);
         makeRequest({ url: '/products', params })
