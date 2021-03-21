@@ -1,5 +1,6 @@
 
 import jwtDecoder from 'jwt-decode';
+import history from './history';
 
 export const CLIENT_ID = 'dscatalog';
 export const CLIENT_SECRET = 'dscatalog123';
@@ -33,9 +34,12 @@ export const getSessiondata =() => {
 
 export const getAccessTokenDecoded = () => {
     const sessionData = getSessiondata();
-    const tokenDecoded = jwtDecoder(sessionData.access_token);
-    return tokenDecoded as AccessToken;
-
+    try{
+        const tokenDecoded = jwtDecoder(sessionData.access_token);
+        return tokenDecoded as AccessToken;
+    }catch(error){
+        return {} as AccessToken;
+    }
 }
 
 export const tokenIsValid = () => {
@@ -56,5 +60,10 @@ export const isAllowedByRole = (routeRoles: Role[] = []) => {
         return true;
     }
     const {authorities} = getAccessTokenDecoded();
-    return routeRoles.some(role => authorities.includes(role));
+    return routeRoles.some(role => authorities?.includes(role));
+}
+
+export const logout = () => {
+    localStorage.removeItem('authData');
+    history.replace('/auth/login');
 }
