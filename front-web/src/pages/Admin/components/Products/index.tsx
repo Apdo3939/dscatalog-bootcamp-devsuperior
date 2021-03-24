@@ -11,11 +11,8 @@ const AdminProducts = () => {
                 <Route path="/admin/products" exact>
                     <ListProducts />
                 </Route>
-                <Route path="/admin/products/create">
-                    <Form />
-                </Route>
                 <Route path="/admin/products/:productId">
-                    <h1>Products edit</h1>
+                    <Form />
                 </Route>
             </Switch>
         </div>

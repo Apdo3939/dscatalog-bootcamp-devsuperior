@@ -22,7 +22,9 @@ const ListProducts = () => {
     useEffect(() => {
         const params = {
             page: activePage,
-            linesPerPage: 3
+            linesPerPage: 3,
+            direction: 'DESC',
+            orderBy: 'id'
         }
         setIsLoading(true);
         makeRequest({ url: '/products', params })
