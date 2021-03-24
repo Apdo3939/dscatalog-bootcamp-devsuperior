@@ -1,6 +1,9 @@
 .product-card{
     padding: 25px;
     text-align: center;
+    .product-price-container{
+        margin-top: 20px;
+    }
 }
 .product-info{
     border-top: 1px solid #E1E1E1;
