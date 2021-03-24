@@ -1,24 +1,26 @@
-import './styles.scss'
-import imagem from '../../../../../core/assets/images/img.svg'
-import ProductPrice from 'core/components/ProductPrice'
+import './styles.scss';
+import ProductPrice from 'core/components/ProductPrice';
+import { Product } from 'core/Types/Product';
 
-const Card = () => {
+type Props = {
+    product: Product
+}
+
+const Card = ({ product }: Props) => {
     return (
         <div className="card-base product-card-list">
             <div className="row">
                 <div className="col-2 text-center border-right py-3">
-                    <img src={imagem}
-                        alt="exemplo de produto"
+                    <img src={product.imgUrl}
+                        alt={product.name}
                         className="product-card-list-image"
                     />
                 </div>
                 <div className="col-7 py-3">
-                    <h3 className="product-card-list-title">Computador I7</h3>
-                    <ProductPrice price={1990.00} />
+                    <h3 className="product-card-list-title">{product.name}</h3>
+                    <ProductPrice price={product.price} />
                     <div className="m2">
-                        <span className="badge bg-secondary mx-1">Categoria 1</span>
-                        <span className="badge bg-secondary mx-1">Categoria 1</span>
-                        <span className="badge bg-secondary mx-1">Categoria 1</span>
+                        <span className="badge bg-secondary mx-1">Category 1</span>
                     </div>
                 </div>
                 <div className="col-3 pt-4 pr-5">
