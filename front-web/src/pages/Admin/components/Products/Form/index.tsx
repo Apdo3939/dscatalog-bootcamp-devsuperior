@@ -1,16 +1,19 @@
 import { makePrivateRequest, makeRequest } from 'core/utils/request';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
 import BaseForm from '../../baseForm';
+import { Category } from 'core/Types/Product';
 import './styles.scss';
+
 
 
 type FormState = {
     name: string;
     price: string;
-    category: string;
+    categories: Category[];
     description: string;
     imgUrl: string;
 }
@@ -19,14 +22,23 @@ type ParamsType = {
     productId: string
 }
 
-
 const Form = () => {
 
-    const { register, handleSubmit, errors, setValue } = useForm<FormState>();
+    const { register, handleSubmit, errors, setValue, control } = useForm<FormState>();
     const history = useHistory();
     const { productId } = useParams<ParamsType>();
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
     const isEditing = productId !== 'create';
     const title = isEditing ? 'Editar Produto' : 'Cadastrar Produto';
+
+    useEffect(() => {
+        setIsLoadingCategories(true);
+        makeRequest({ url: '/categories' })
+            .then(response => setCategories(response.data.content))
+            .finally(() => setIsLoadingCategories(false));
+
+    }, []);
 
     useEffect(() => {
         if (isEditing) {
@@ -34,18 +46,19 @@ const Form = () => {
                 .then(response => {
                     setValue('name', response.data.name);
                     setValue('price', response.data.price);
-                    setValue('category', response.data.category);
+                    setValue('categories', response.data.categories);
                     setValue('description', response.data.description);
                     setValue('imgUrl', response.data.imgUrl);
                 });
         }
-    }, [productId, isEditing,setValue]);
+    }, [productId, isEditing, setValue]);
 
     const onSubmit = (formData: FormState) => {
-        makePrivateRequest({ 
-            method: isEditing? 'PUT':'POST', 
-            url: isEditing? `/products/${productId}` : '/products', 
-            data: formData })
+        makePrivateRequest({
+            method: isEditing ? 'PUT' : 'POST',
+            url: isEditing ? `/products/${productId}` : '/products',
+            data: formData
+        })
             .then(() => {
                 toast.info("Produto cadastrado com sucesso!!!");
                 history.push('/admin/products');
@@ -80,19 +93,23 @@ const Form = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            {errors.category && (
+                            {errors.categories && (
                                 <div className="invalid-feedback d-block">
-                                    {errors.category.message}
+                                    Por favor, escolher uma categoria
                                 </div>
                             )}
-                            <input
-                                ref={register({
-                                    required: "Campo Obrigatório"
-                                })}
-                                name="category"
-                                type="text"
-                                className="form-control input-base"
-                                placeholder="Nome da Categoria"
+                            <Controller
+                                as={Select}
+                                name="categories"
+                                rules={{ required: true }}
+                                control={control}
+                                isLoading={isLoadingCategories}
+                                options={categories}
+                                getOptionLabel={(option: Category) => option.name}
+                                getOptionValue={(option: Category) => String(option.id)}
+                                isMulti
+                                placeholder="Categoria"
+                                classNamePrefix="categories-select"
                             />
                         </div>
                         <div className="mb-4">
