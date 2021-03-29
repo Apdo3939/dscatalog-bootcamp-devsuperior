@@ -32,7 +32,7 @@ const Register = () => {
             )}
 
             <form className="form-login" >
-                <div className="margin-bottom-30">
+                <div className="margin-bottom-20">
                     <input
                         name="firstname"
                         ref={register({
@@ -47,7 +47,7 @@ const Register = () => {
                     </div>}
                 </div>
 
-                <div className="margin-bottom-30">
+                <div className="margin-bottom-20">
                     <input
                         name="lastname"
                         ref={register({
@@ -61,7 +61,7 @@ const Register = () => {
                         {errors.lastname.message}
                     </div>}
                 </div>
-                <div className="margin-bottom-30">
+                <div className="margin-bottom-20">
                     <input
                         name="username"
                         ref={register({
@@ -75,7 +75,7 @@ const Register = () => {
                         {errors.username.message}
                     </div>}
                 </div>
-                <div className="register-input">
+                <div className="margin-bottom-20">
                     <input
                         name="password"
                         ref={register({
@@ -90,7 +90,7 @@ const Register = () => {
                         {errors.password.message}
                     </div>}
                 </div>
-                <div className="register-input">
+                <div className="margin-bottom-20">
                     <input
                         name="password"
                         ref={register({

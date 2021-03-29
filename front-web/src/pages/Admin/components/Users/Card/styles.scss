@@ -1,0 +1,33 @@
+.user-card-list {
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.user-card-list-title {
+    margin-top    : 20px;
+    margin-left   : 20px;
+    font-size     : 18px;
+    line-height   : 25px;
+    letter-spacing: -0.015em;
+    color         : #263238;
+
+}
+
+.user-card-list-text {
+    margin-left   : 20px;
+    font-weight   : normal;
+    font-size     : 14px;
+    line-height   : 18px;
+    letter-spacing: -0.015em;
+    color         : #9E9E9E;
+}
+
+.user-card-list-button {
+    width: 180px;
+}
+
+.user-card-list-button-edit {
+    width: 180px;
+    color: #9E9E9E !important;
+
+}

@@ -72,7 +72,6 @@ const Form = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm title={title}>
-
                 <div className="row">
                     <div className="col-6">
                         <div className="mt-5 mb-4">
