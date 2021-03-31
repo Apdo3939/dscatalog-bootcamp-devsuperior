@@ -8,8 +8,7 @@ import BaseForm from '../../baseForm';
 import { Category } from 'core/Types/Product';
 import './styles.scss';
 import PriceField from './PriceField';
-
-
+import ImageUpload from '../ImageUpload';
 
 export type FormState = {
     name: string;
@@ -30,6 +29,8 @@ const Form = () => {
     const { productId } = useParams<ParamsType>();
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+    const [uploadedImgUrl, setUploadedImgUrl] = useState('');
+    const [productImgUrl, setproductImgUrl] = useState('');
     const isEditing = productId !== 'create';
     const title = isEditing ? 'Editar Produto' : 'Cadastrar Produto';
 
@@ -49,16 +50,22 @@ const Form = () => {
                     setValue('price', response.data.price);
                     setValue('categories', response.data.categories);
                     setValue('description', response.data.description);
-                    setValue('imgUrl', response.data.imgUrl);
+                    setproductImgUrl(response.data.imgUrl);
                 });
         }
     }, [productId, isEditing, setValue]);
 
     const onSubmit = (formData: FormState) => {
+
+        const payload = {
+            ...formData,
+            imgUrl: uploadedImgUrl
+        }
+
         makePrivateRequest({
             method: isEditing ? 'PUT' : 'POST',
             url: isEditing ? `/products/${productId}` : '/products',
-            data: formData
+            data: payload
         })
             .then(() => {
                 toast.info("Produto cadastrado com sucesso!!!");
@@ -69,12 +76,16 @@ const Form = () => {
             });
     }
 
+    const onUploadSuccess = (imgUrl: string) => {
+        setUploadedImgUrl(imgUrl);
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm title={title}>
                 <div className="row">
                     <div className="col-6">
-                        <div className="mt-5 mb-4">
+                        <div className="mt-4 mb-3">
                             {errors.name && (
                                 <div className="invalid-feedback d-block">
                                     {errors.name.message}
@@ -92,7 +103,7 @@ const Form = () => {
                                 placeholder="Nome do produto"
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             {errors.categories && (
                                 <div className="invalid-feedback d-block">
                                     Por favor, escolher uma categoria
@@ -113,7 +124,7 @@ const Form = () => {
                                 defaultValue=""
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             {errors.price && (
                                 <div className="invalid-feedback d-block">
                                     {errors.price.message}
@@ -123,23 +134,11 @@ const Form = () => {
                                 control={control}
                             />
                         </div>
-
-                        <div className="mt-4">
-                            {errors.imgUrl && (
-                                <div className="invalid-feedback d-block">
-                                    {errors.imgUrl.message}
-                                </div>
-                            )}
-                            <input
-                                ref={register({ required: "Campo Obrigatório" })}
-                                name="imgUrl"
-                                type="text"
-                                className="form-control input-base"
-                                placeholder="Endereço da imagem"
-                            />
+                        <div className="mt-1">
+                            <ImageUpload onUploadSuccess={onUploadSuccess} productImgUrl={productImgUrl} />
                         </div>
                     </div>
-                    <div className="col-6 mt-5">
+                    <div className="col-6 mt-4">
                         {errors.description && (
                             <div className="invalid-feedback d-block">
                                 {errors.description.message}
