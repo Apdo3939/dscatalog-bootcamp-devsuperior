@@ -59,7 +59,7 @@ const Form = () => {
 
         const payload = {
             ...formData,
-            imgUrl: uploadedImgUrl
+            imgUrl: uploadedImgUrl || productImgUrl
         }
 
         makePrivateRequest({
