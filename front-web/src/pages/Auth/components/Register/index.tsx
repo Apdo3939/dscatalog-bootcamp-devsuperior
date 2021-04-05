@@ -23,6 +23,15 @@ const Register = () => {
     const history = useHistory();
     const location = useLocation<LocationState>();
 
+
+
+    const onSubmit = (data: FormState) => {
+        console.log(data);
+        console.log(history);
+        console.log(location);
+        setHasError(false);
+    }
+
     return (
         <AuthCard title="CADASTRO">
             {hasError && (
@@ -31,7 +40,7 @@ const Register = () => {
                 </div>
             )}
 
-            <form className="form-login" >
+            <form className="form-login" onSubmit={handleSubmit(onSubmit)} >
                 <div className="margin-bottom-20">
                     <input
                         name="firstname"

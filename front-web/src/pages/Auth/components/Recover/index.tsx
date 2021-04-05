@@ -24,6 +24,9 @@ const Recover = () => {
 
     const onSubmit = (data: FormState) => {
         console.log(data);
+        console.log(history);
+        console.log(location);
+        setHasError(false);
     }
 
     return (
